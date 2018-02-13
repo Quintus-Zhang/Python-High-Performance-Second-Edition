@@ -2,6 +2,8 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 from random import uniform
 import timeit
+import memory_profiler
+
 
 class Particle:
 
@@ -18,6 +20,8 @@ class ParticleSimulator:
     def __init__(self, particles):
         self.particles = particles
 
+    @memory_profiler.profile
+    # @profile
     def evolve(self, dt):
         timestep = 0.00001
         nsteps = int(dt/timestep)
@@ -45,6 +49,7 @@ class ParticleSimulator:
     #         for i in range(nsteps):
     #             norm = (p.x**2 + p.y**2)**0.5
     #             p.x, p.y = p.x - t_x_ang*p.y/norm, p.y + t_x_ang * p.x/norm
+
 
 def visualize(simulator):
 
@@ -89,6 +94,7 @@ def test_visualize():
 
     simulator = ParticleSimulator(particles)
     visualize(simulator)
+
 
 def test_evolve():
     particles = [Particle( 0.3,  0.5, +1),
@@ -143,11 +149,14 @@ def benchmark_memory():
     particles = [Particle(uniform(-1.0, 1.0),
                           uniform(-1.0, 1.0),
                           uniform(-1.0, 1.0))
-                  for i in range(100000)]
+                  for i in range(100)]
 
     simulator = ParticleSimulator(particles)
     simulator.evolve(0.001)
 
 
 if __name__ == '__main__':
-    benchmark()
+    # test_evolve()
+    # test_visualize()
+    # benchmark()
+    benchmark_memory()
